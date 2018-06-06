@@ -183,10 +183,10 @@ class Parser {
 		Node thisNode = nextNode;
 
 		parseStmt();
+		currentNode = thisNode;
 		if (accept("SEMICOLON")) {
 			thisNode.addChild(new Node("SEMICOLON"));
 			parseStmtList();
-			thisNode.addChild(new Node("stmt_list"));
 		}
 	}
 
@@ -196,44 +196,66 @@ class Parser {
 		currentNode = nextNode;
 		Node thisNode = nextNode;
 
-		if (accept("ID")) {
+		// attr_stmt check
+		if (accept("GRAPH")) {
+			thisNode.addChild(new Node("GRAPH"));
+
+			// is attr_stmt
+			if (accept("LEFT-BRACKET")) {
+				parseAttrList();
+				currentNode = thisNode;
+			} else {
+				System.out.println("Line " + lineNumber + ": missing attr_stmt brace");
+			}
+		} else if (accept("NODE")) {
+			thisNode.addChild(new Node("NODE"));
+
+			// is attr_stmt
+			if (accept("LEFT-BRACKET")) {
+				parseAttrList();
+				currentNode = thisNode;
+			} else {
+				System.out.println("Line " + lineNumber + ": missing attr_stmt brace");
+			}
+		} else if (accept("EDGE")) {
+			thisNode.addChild(new Node("EDGE"));
+
+			// is attr_stmt
+			if (accept("LEFT-BRACKET")) {
+				parseAttrList();
+				currentNode = thisNode;
+			} else {
+				System.out.println("Line " + lineNumber + ": missing attr_stmt brace");
+			}
+		} else if (accept("ID")) {
 			// can be node_stmt, edge_stmt, or ID '=' ID
-			thisNode.addChild(new Node("ID"));
-			parseNodeId();
-			if (accept("GRAPH") || accept("NODE") || accept("EDGE")) {
-				// is attr_stmt
-				if (accept("LEFT-BRACKET")) {
-					thisNode.addChild(new Node("LEFT-BRACKET"));
-					parseAttrList();
-				} else {
-					System.out.println("Line " + lineNumber + ": missing attr_stmt brace");
-				}
-			} else if (accept("EDGEOP")) {
-				thisNode.addChild(new Node("EDGEOP"));
-				// is edge_stmt
-				parseEdgeStmt();
-				if (accept("LEFT-BRACKET")) {
-					thisNode.addChild(new Node("LEFT-BRACKET"));
-					parseAttrList();
-				}
-			} else if (accept("ASSIGNMENT")) {
+
+			if (accept("ASSIGNMENT")) {
+				thisNode.addChild(new Node("ID"));
 				thisNode.addChild(new Node("ASSIGNMENT"));
+
 				// is ID '=' ID
 				if (!accept("ID")) {
 					System.out.println("Line " + lineNumber + ": missing ID after assignment");
 					System.exit(1);
 				}
 				thisNode.addChild(new Node("ID"));
-			} else if (accept("LEFT-BRACKET")) {
-				thisNode.addChild(new Node("LEFT-BRACKET"));
+			} else if (accept("EDGEOP")) {
+				// is edge_stmt
+				parseEdgeStmt();
+				currentNode = thisNode;
+			} else {
 				// is node_stmt
 				parseNodeStmt();
+				currentNode = thisNode;
 			}
 		} else if (accept("SUBGRAPH")) {
 			parseSubgraph();
+			currentNode = thisNode;
 		} else if (accept("LEFT-BRACE")) {
 			// move r-value subgraph up to this level
 			parseStmtList();
+			currentNode = thisNode;
 			if (!accept("RIGHT-BRACE")) {
 				System.out.println("Line " + lineNumber + ": missing closing brace");
 				System.exit(1);
@@ -247,16 +269,9 @@ class Parser {
 		currentNode = nextNode;
 		Node thisNode = nextNode;
 
+		parseNodeId();
+		currentNode = thisNode;
 		parseAttrList();
-	}
-
-	static void parseEdgeStmt() {
-		nextNode = new Node("edge_stmt");
-		currentNode.addChild(nextNode);
-		currentNode = nextNode;
-		Node thisNode = nextNode;
-
-		parseEdgeRHS();
 	}
 
 	static void parseNodeId() {
@@ -265,10 +280,24 @@ class Parser {
 		currentNode = nextNode;
 		Node thisNode = nextNode;
 
+		thisNode.addChild(new Node("ID"));
 		if (accept("COLON")) {
 			thisNode.addChild(new Node("COLON"));
 			parsePort();
 		}
+	}
+
+	static void parseEdgeStmt() {
+		nextNode = new Node("edge_stmt");
+		currentNode.addChild(nextNode);
+		currentNode = nextNode;
+		Node thisNode = nextNode;
+
+		parseNodeId();
+		thisNode.addChild(new Node("EDGEOP"));
+		parseEdgeRHS();
+		currentNode = thisNode;
+		parseAttrList();
 	}
 
 	static void parsePort() {
@@ -310,19 +339,15 @@ class Parser {
 		currentNode = nextNode;
 		Node thisNode = nextNode;
 
-		if (accept("ID")) {
-			thisNode.addChild(new Node("ID"));
-			parseAList();
-		}
 		if (accept("LEFT-BRACKET")) {
 			thisNode.addChild(new Node("LEFT-BRACKET"));
-			parseAttrList();
+			parseAList();
+			if (!accept("RIGHT-BRACKET")) {
+				System.out.println("Line " + lineNumber + ": missing closing bracket");
+				System.exit(1);
+			}
+			thisNode.addChild(new Node("RIGHT-BRACKET"));
 		}
-		if (!accept("RIGHT-BRACKET")) {
-			System.out.println("Line " + lineNumber + ": missing closing bracket");
-			System.exit(1);
-		}
-		thisNode.addChild(new Node("RIGHT-BRACKET"));
 	}
 
 	static void parseAList() {
@@ -331,6 +356,8 @@ class Parser {
 		currentNode = nextNode;
 		Node thisNode = nextNode;
 
+		if (accept("ID")) {
+			thisNode.addChild(new Node("ID"));
 		if (accept("ASSIGNMENT")) {
 			thisNode.addChild(new Node("ASSIGNMENT"));
 			if (accept("ID")) {
@@ -339,9 +366,6 @@ class Parser {
 				// accept("SEMICOLON");
 				if (accept("COMMA")) {
 					thisNode.addChild(new Node("COMMA"));
-				}
-				if (accept("ID")) {
-					thisNode.addChild(new Node("ID"));
 					parseAList();
 				}
 			} else {
@@ -351,6 +375,7 @@ class Parser {
 		} else {
 			System.out.println("Line " + lineNumber + ": missing assignment");
 			System.exit(1);
+		}
 		}
 	}
 
@@ -363,6 +388,7 @@ class Parser {
 		if (accept("ID")) {
 			thisNode.addChild(new Node("ID"));
 			parseNodeId();
+			currentNode = thisNode;
 			if (accept("EDGEOP")) {
 				thisNode.addChild(new Node("EDGEOP"));
 				parseEdgeRHS();
