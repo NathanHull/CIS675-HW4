@@ -1,0 +1,109 @@
+Helpers
+	all_characters = [0..0xffff];
+	no_star_slash = [all_characters - ['*'+'/']];
+	no_quote = [all_characters - '"'];
+	letter = [0x0041 .. 0x0079];
+	number = ['0' .. '9'];
+	sp = ' ';
+	ht = 0x0009;
+	ff = 0x000c;
+	lf = 0x000a;
+	cr = 0x000d;
+	line_terminator = lf | cr | cr lf;
+	white_space = sp | ht | ff | line_terminator;
+
+Tokens
+	strict = 'strict';
+	digraphk = 'digraph';
+	subgraphk = 'subgraph';
+	graphk = 'graph';
+	nodek = 'node';
+	edgek = 'edge';
+	leftbrace = '{';
+	rightbrace = '}';
+	leftbracket = '[';
+	rightbracket = ']';
+	edgeop = '->';
+	semicolon = ';';
+	colon = ':';
+	assignment = '=';
+	comma = ',';
+	n = 'n';
+	ne = 'ne';
+	e = 'e';
+	se = 'se';
+	s = 's';
+	sw = 'sw';
+	w = 'w';
+	nw = 'nw';
+	c = 'c';
+	u = '_';
+	id = (letter | number)+ | '"' no_quote* '"' ;
+	whitespaces = white_space+;
+	comment = '/*' no_star_slash* '*/';
+
+Ignored Tokens
+	whitespaces, comment;
+
+Productions
+	graph =
+		{graph}		strict? graphk id? leftbrace stmt_list rightbrace |
+		{digraph}	strict? digraphk id? leftbrace stmt_list rightbrace ;
+
+	stmt_list =
+		{continue}	stmt semicolon? stmt_list |
+		{empty}		;
+
+	stmt = 
+		{nstmt}		node_stmt |
+		{estmt}		edge_stmt |
+		{atstmt}	attr_stmt |
+		{asstmt}	[l]:id assignment [r]:id |
+		{sstmt}		subgraph ;
+
+	attr_stmt =
+		{graphas}	graphk attr_list |
+		{nodeas}	nodek attr_list |
+		{edgeas}	edgek attr_list ;
+
+	attr_list =
+					leftbracket a_list? rightbracket attr_list? ;
+
+	a_list =
+		{commasep}	[l]:id assignment [r]:id comma? a_list? ;
+
+	edge_stmt =
+		{nodees}	node_id edgerhs attr_list? |
+		{subes}		subgraph edgerhs attr_list? ;
+
+	edgerhs =
+		{nodeer}	edgeop node_id edgerhs? |
+		{suber}		edgeop subgraph edgerhs? ;
+
+	node_stmt =
+		{nodestmt}	node_id attr_list? ;
+	
+	node_id =
+					id port? ;
+	
+	port =
+		{iport}		colon id |
+		{nport}		[first]:colon id [second]:colon compass_pt |
+		{cport}		colon compass_pt ;
+
+	subgraph =
+		{subg}		leftbrace stmt_list rightbrace |
+		{nsubg}		subgraphk id leftbrace stmt_list rightbrace |
+		{dsubg}		subgraphk leftbrace stmt_list rightbrace ;
+
+	compass_pt =
+		{cpn}		n |
+		{cpne}		ne |
+		{cpe}		e |
+		{cpse}		se |
+		{cps}		s |
+		{cpsw}		sw |
+		{cpw}		w |
+		{cpnw}		nw |
+		{cpc}		c |
+		{cpu}		u ;
