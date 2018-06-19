@@ -2,7 +2,7 @@ Helpers
 	all_characters = [0..0xffff];
 	no_star_slash = [all_characters - ['*'+'/']];
 	no_quote = [all_characters - '"'];
-	letter = [0x0041 .. 0x0079];
+	letter = [65 .. 90] | [97 .. 122] | '_';
 	number = ['0' .. '9'];
 	sp = ' ';
 	ht = 0x0009;
@@ -38,7 +38,7 @@ Tokens
 	nw = 'nw';
 	c = 'c';
 	u = '_';
-	id = (letter | number)+ | '"' no_quote* '"' ;
+	id = letter (letter | number)* | (number)+ | '"' no_quote* '"' ;
 	whitespaces = white_space+;
 	comment = '/*' no_star_slash* '*/';
 
@@ -51,8 +51,8 @@ Productions
 		{digraph}	strict? digraphk id? leftbrace stmt_list rightbrace ;
 
 	stmt_list =
-		{continue}	stmt semicolon? stmt_list |
-		{empty}		;
+		{empty}		|
+		{continue}	stmt semicolon? stmt_list ;
 
 	stmt = 
 		{nstmt}		node_stmt |
@@ -70,7 +70,7 @@ Productions
 					leftbracket a_list? rightbracket attr_list? ;
 
 	a_list =
-		{commasep}	[l]:id assignment [r]:id comma? a_list? ;
+		{commasep}	[l]:id assignment [r]:id comma? semicolon? a_list? ;
 
 	edge_stmt =
 		{nodees}	node_id edgerhs attr_list? |
@@ -81,7 +81,7 @@ Productions
 		{suber}		edgeop subgraph edgerhs? ;
 
 	node_stmt =
-		{nodestmt}	node_id attr_list? ;
+					node_id attr_list? ;
 	
 	node_id =
 					id port? ;

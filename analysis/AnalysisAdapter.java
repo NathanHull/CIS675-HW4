@@ -87,13 +87,13 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseAContinueStmtList(AContinueStmtList node)
+    public void caseAEmptyStmtList(AEmptyStmtList node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAEmptyStmtList(AEmptyStmtList node)
+    public void caseAContinueStmtList(AContinueStmtList node)
     {
         defaultCase(node);
     }
@@ -183,7 +183,7 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseANodestmtNodeStmt(ANodestmtNodeStmt node)
+    public void caseANodeStmt(ANodeStmt node)
     {
         defaultCase(node);
     }

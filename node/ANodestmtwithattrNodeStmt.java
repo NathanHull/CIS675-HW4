@@ -5,34 +5,39 @@ package node;
 import analysis.*;
 
 @SuppressWarnings("nls")
-public final class ANodestmtNodeStmt extends PNodeStmt
+public final class ANodestmtwithattrNodeStmt extends PNodeStmt
 {
     private PNodeId _nodeId_;
+    private PAttrList _attrList_;
 
-    public ANodestmtNodeStmt()
+    public ANodestmtwithattrNodeStmt()
     {
         // Constructor
     }
 
-    public ANodestmtNodeStmt(
-        @SuppressWarnings("hiding") PNodeId _nodeId_)
+    public ANodestmtwithattrNodeStmt(
+        @SuppressWarnings("hiding") PNodeId _nodeId_,
+        @SuppressWarnings("hiding") PAttrList _attrList_)
     {
         // Constructor
         setNodeId(_nodeId_);
+
+        setAttrList(_attrList_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new ANodestmtNodeStmt(
-            cloneNode(this._nodeId_));
+        return new ANodestmtwithattrNodeStmt(
+            cloneNode(this._nodeId_),
+            cloneNode(this._attrList_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseANodestmtNodeStmt(this);
+        ((Analysis) sw).caseANodestmtwithattrNodeStmt(this);
     }
 
     public PNodeId getNodeId()
@@ -60,11 +65,37 @@ public final class ANodestmtNodeStmt extends PNodeStmt
         this._nodeId_ = node;
     }
 
+    public PAttrList getAttrList()
+    {
+        return this._attrList_;
+    }
+
+    public void setAttrList(PAttrList node)
+    {
+        if(this._attrList_ != null)
+        {
+            this._attrList_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._attrList_ = node;
+    }
+
     @Override
     public String toString()
     {
         return ""
-            + toString(this._nodeId_);
+            + toString(this._nodeId_)
+            + toString(this._attrList_);
     }
 
     @Override
@@ -74,6 +105,12 @@ public final class ANodestmtNodeStmt extends PNodeStmt
         if(this._nodeId_ == child)
         {
             this._nodeId_ = null;
+            return;
+        }
+
+        if(this._attrList_ == child)
+        {
+            this._attrList_ = null;
             return;
         }
 
@@ -87,6 +124,12 @@ public final class ANodestmtNodeStmt extends PNodeStmt
         if(this._nodeId_ == oldChild)
         {
             setNodeId((PNodeId) newChild);
+            return;
+        }
+
+        if(this._attrList_ == oldChild)
+        {
+            setAttrList((PAttrList) newChild);
             return;
         }
 

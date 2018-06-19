@@ -118,6 +118,23 @@ public class DepthFirstAdapter extends AnalysisAdapter
         outADigraphGraph(node);
     }
 
+    public void inAEmptyStmtList(AEmptyStmtList node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAEmptyStmtList(AEmptyStmtList node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAEmptyStmtList(AEmptyStmtList node)
+    {
+        inAEmptyStmtList(node);
+        outAEmptyStmtList(node);
+    }
+
     public void inAContinueStmtList(AContinueStmtList node)
     {
         defaultIn(node);
@@ -145,23 +162,6 @@ public class DepthFirstAdapter extends AnalysisAdapter
             node.getStmtList().apply(this);
         }
         outAContinueStmtList(node);
-    }
-
-    public void inAEmptyStmtList(AEmptyStmtList node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAEmptyStmtList(AEmptyStmtList node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAEmptyStmtList(AEmptyStmtList node)
-    {
-        inAEmptyStmtList(node);
-        outAEmptyStmtList(node);
     }
 
     public void inANstmtStmt(ANstmtStmt node)
@@ -415,6 +415,10 @@ public class DepthFirstAdapter extends AnalysisAdapter
         {
             node.getComma().apply(this);
         }
+        if(node.getSemicolon() != null)
+        {
+            node.getSemicolon().apply(this);
+        }
         if(node.getAList() != null)
         {
             node.getAList().apply(this);
@@ -538,20 +542,20 @@ public class DepthFirstAdapter extends AnalysisAdapter
         outASuberEdgerhs(node);
     }
 
-    public void inANodestmtNodeStmt(ANodestmtNodeStmt node)
+    public void inANodeStmt(ANodeStmt node)
     {
         defaultIn(node);
     }
 
-    public void outANodestmtNodeStmt(ANodestmtNodeStmt node)
+    public void outANodeStmt(ANodeStmt node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseANodestmtNodeStmt(ANodestmtNodeStmt node)
+    public void caseANodeStmt(ANodeStmt node)
     {
-        inANodestmtNodeStmt(node);
+        inANodeStmt(node);
         if(node.getNodeId() != null)
         {
             node.getNodeId().apply(this);
@@ -560,7 +564,7 @@ public class DepthFirstAdapter extends AnalysisAdapter
         {
             node.getAttrList().apply(this);
         }
-        outANodestmtNodeStmt(node);
+        outANodeStmt(node);
     }
 
     public void inANodeId(ANodeId node)

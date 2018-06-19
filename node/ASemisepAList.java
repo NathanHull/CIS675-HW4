@@ -7,9 +7,9 @@ import analysis.*;
 @SuppressWarnings("nls")
 public final class ASemisepAList extends PAList
 {
-    private TId _id1_;
+    private TId _l_;
     private TAssignment _assignment_;
-    private TId _id2_;
+    private TId _r_;
     private TSemicolon _semicolon_;
     private PAList _aList_;
 
@@ -19,18 +19,18 @@ public final class ASemisepAList extends PAList
     }
 
     public ASemisepAList(
-        @SuppressWarnings("hiding") TId _id1_,
+        @SuppressWarnings("hiding") TId _l_,
         @SuppressWarnings("hiding") TAssignment _assignment_,
-        @SuppressWarnings("hiding") TId _id2_,
+        @SuppressWarnings("hiding") TId _r_,
         @SuppressWarnings("hiding") TSemicolon _semicolon_,
         @SuppressWarnings("hiding") PAList _aList_)
     {
         // Constructor
-        setId1(_id1_);
+        setL(_l_);
 
         setAssignment(_assignment_);
 
-        setId2(_id2_);
+        setR(_r_);
 
         setSemicolon(_semicolon_);
 
@@ -42,9 +42,9 @@ public final class ASemisepAList extends PAList
     public Object clone()
     {
         return new ASemisepAList(
-            cloneNode(this._id1_),
+            cloneNode(this._l_),
             cloneNode(this._assignment_),
-            cloneNode(this._id2_),
+            cloneNode(this._r_),
             cloneNode(this._semicolon_),
             cloneNode(this._aList_));
     }
@@ -55,16 +55,16 @@ public final class ASemisepAList extends PAList
         ((Analysis) sw).caseASemisepAList(this);
     }
 
-    public TId getId1()
+    public TId getL()
     {
-        return this._id1_;
+        return this._l_;
     }
 
-    public void setId1(TId node)
+    public void setL(TId node)
     {
-        if(this._id1_ != null)
+        if(this._l_ != null)
         {
-            this._id1_.parent(null);
+            this._l_.parent(null);
         }
 
         if(node != null)
@@ -77,7 +77,7 @@ public final class ASemisepAList extends PAList
             node.parent(this);
         }
 
-        this._id1_ = node;
+        this._l_ = node;
     }
 
     public TAssignment getAssignment()
@@ -105,16 +105,16 @@ public final class ASemisepAList extends PAList
         this._assignment_ = node;
     }
 
-    public TId getId2()
+    public TId getR()
     {
-        return this._id2_;
+        return this._r_;
     }
 
-    public void setId2(TId node)
+    public void setR(TId node)
     {
-        if(this._id2_ != null)
+        if(this._r_ != null)
         {
-            this._id2_.parent(null);
+            this._r_.parent(null);
         }
 
         if(node != null)
@@ -127,7 +127,7 @@ public final class ASemisepAList extends PAList
             node.parent(this);
         }
 
-        this._id2_ = node;
+        this._r_ = node;
     }
 
     public TSemicolon getSemicolon()
@@ -184,9 +184,9 @@ public final class ASemisepAList extends PAList
     public String toString()
     {
         return ""
-            + toString(this._id1_)
+            + toString(this._l_)
             + toString(this._assignment_)
-            + toString(this._id2_)
+            + toString(this._r_)
             + toString(this._semicolon_)
             + toString(this._aList_);
     }
@@ -195,9 +195,9 @@ public final class ASemisepAList extends PAList
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._id1_ == child)
+        if(this._l_ == child)
         {
-            this._id1_ = null;
+            this._l_ = null;
             return;
         }
 
@@ -207,9 +207,9 @@ public final class ASemisepAList extends PAList
             return;
         }
 
-        if(this._id2_ == child)
+        if(this._r_ == child)
         {
-            this._id2_ = null;
+            this._r_ = null;
             return;
         }
 
@@ -232,9 +232,9 @@ public final class ASemisepAList extends PAList
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._id1_ == oldChild)
+        if(this._l_ == oldChild)
         {
-            setId1((TId) newChild);
+            setL((TId) newChild);
             return;
         }
 
@@ -244,9 +244,9 @@ public final class ASemisepAList extends PAList
             return;
         }
 
-        if(this._id2_ == oldChild)
+        if(this._r_ == oldChild)
         {
-            setId2((TId) newChild);
+            setR((TId) newChild);
             return;
         }
 

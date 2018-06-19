@@ -11,6 +11,7 @@ public final class ACommasepAList extends PAList
     private TAssignment _assignment_;
     private TId _r_;
     private TComma _comma_;
+    private TSemicolon _semicolon_;
     private PAList _aList_;
 
     public ACommasepAList()
@@ -23,6 +24,7 @@ public final class ACommasepAList extends PAList
         @SuppressWarnings("hiding") TAssignment _assignment_,
         @SuppressWarnings("hiding") TId _r_,
         @SuppressWarnings("hiding") TComma _comma_,
+        @SuppressWarnings("hiding") TSemicolon _semicolon_,
         @SuppressWarnings("hiding") PAList _aList_)
     {
         // Constructor
@@ -33,6 +35,8 @@ public final class ACommasepAList extends PAList
         setR(_r_);
 
         setComma(_comma_);
+
+        setSemicolon(_semicolon_);
 
         setAList(_aList_);
 
@@ -46,6 +50,7 @@ public final class ACommasepAList extends PAList
             cloneNode(this._assignment_),
             cloneNode(this._r_),
             cloneNode(this._comma_),
+            cloneNode(this._semicolon_),
             cloneNode(this._aList_));
     }
 
@@ -155,6 +160,31 @@ public final class ACommasepAList extends PAList
         this._comma_ = node;
     }
 
+    public TSemicolon getSemicolon()
+    {
+        return this._semicolon_;
+    }
+
+    public void setSemicolon(TSemicolon node)
+    {
+        if(this._semicolon_ != null)
+        {
+            this._semicolon_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._semicolon_ = node;
+    }
+
     public PAList getAList()
     {
         return this._aList_;
@@ -188,6 +218,7 @@ public final class ACommasepAList extends PAList
             + toString(this._assignment_)
             + toString(this._r_)
             + toString(this._comma_)
+            + toString(this._semicolon_)
             + toString(this._aList_);
     }
 
@@ -216,6 +247,12 @@ public final class ACommasepAList extends PAList
         if(this._comma_ == child)
         {
             this._comma_ = null;
+            return;
+        }
+
+        if(this._semicolon_ == child)
+        {
+            this._semicolon_ = null;
             return;
         }
 
@@ -253,6 +290,12 @@ public final class ACommasepAList extends PAList
         if(this._comma_ == oldChild)
         {
             setComma((TComma) newChild);
+            return;
+        }
+
+        if(this._semicolon_ == oldChild)
+        {
+            setSemicolon((TSemicolon) newChild);
             return;
         }
 

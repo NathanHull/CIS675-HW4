@@ -14,8 +14,8 @@ public interface Analysis extends Switch
     void caseStart(Start node);
     void caseAGraphGraph(AGraphGraph node);
     void caseADigraphGraph(ADigraphGraph node);
-    void caseAContinueStmtList(AContinueStmtList node);
     void caseAEmptyStmtList(AEmptyStmtList node);
+    void caseAContinueStmtList(AContinueStmtList node);
     void caseANstmtStmt(ANstmtStmt node);
     void caseAEstmtStmt(AEstmtStmt node);
     void caseAAtstmtStmt(AAtstmtStmt node);
@@ -30,7 +30,7 @@ public interface Analysis extends Switch
     void caseASubesEdgeStmt(ASubesEdgeStmt node);
     void caseANodeerEdgerhs(ANodeerEdgerhs node);
     void caseASuberEdgerhs(ASuberEdgerhs node);
-    void caseANodestmtNodeStmt(ANodestmtNodeStmt node);
+    void caseANodeStmt(ANodeStmt node);
     void caseANodeId(ANodeId node);
     void caseAIportPort(AIportPort node);
     void caseANportPort(ANportPort node);

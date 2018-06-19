@@ -12,9 +12,9 @@ public class driver {
 		if (arguments.length == 1) {
 			readFile(arguments[0]);
 		}
-		while ((line = stdin.readLine()) != null) {
-			readFile(line);
-		}
+		// while ((line = stdin.readLine()) != null) {
+		// 	readFile(line);
+		// }
 	}
 
 	static void readFile(String file) throws Exception {
@@ -29,11 +29,10 @@ public class driver {
 			try {
 				Start ast = parser.parse();
 				System.out.println("Parsed successfully");
+				ast.apply(new TranslateGraph());
 			} catch (Exception e) {
 				throw e;
 			}
-
-			// Parser p = new Parser(new Lexer(new PushbackReader(new InputStreamReader(file), 1024)));
 		} finally {
 			in.close();
 		}

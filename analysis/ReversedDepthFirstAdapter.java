@@ -118,6 +118,23 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         outADigraphGraph(node);
     }
 
+    public void inAEmptyStmtList(AEmptyStmtList node)
+    {
+        defaultIn(node);
+    }
+
+    public void outAEmptyStmtList(AEmptyStmtList node)
+    {
+        defaultOut(node);
+    }
+
+    @Override
+    public void caseAEmptyStmtList(AEmptyStmtList node)
+    {
+        inAEmptyStmtList(node);
+        outAEmptyStmtList(node);
+    }
+
     public void inAContinueStmtList(AContinueStmtList node)
     {
         defaultIn(node);
@@ -145,23 +162,6 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
             node.getStmt().apply(this);
         }
         outAContinueStmtList(node);
-    }
-
-    public void inAEmptyStmtList(AEmptyStmtList node)
-    {
-        defaultIn(node);
-    }
-
-    public void outAEmptyStmtList(AEmptyStmtList node)
-    {
-        defaultOut(node);
-    }
-
-    @Override
-    public void caseAEmptyStmtList(AEmptyStmtList node)
-    {
-        inAEmptyStmtList(node);
-        outAEmptyStmtList(node);
     }
 
     public void inANstmtStmt(ANstmtStmt node)
@@ -403,6 +403,10 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         {
             node.getAList().apply(this);
         }
+        if(node.getSemicolon() != null)
+        {
+            node.getSemicolon().apply(this);
+        }
         if(node.getComma() != null)
         {
             node.getComma().apply(this);
@@ -538,20 +542,20 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         outASuberEdgerhs(node);
     }
 
-    public void inANodestmtNodeStmt(ANodestmtNodeStmt node)
+    public void inANodeStmt(ANodeStmt node)
     {
         defaultIn(node);
     }
 
-    public void outANodestmtNodeStmt(ANodestmtNodeStmt node)
+    public void outANodeStmt(ANodeStmt node)
     {
         defaultOut(node);
     }
 
     @Override
-    public void caseANodestmtNodeStmt(ANodestmtNodeStmt node)
+    public void caseANodeStmt(ANodeStmt node)
     {
-        inANodestmtNodeStmt(node);
+        inANodeStmt(node);
         if(node.getAttrList() != null)
         {
             node.getAttrList().apply(this);
@@ -560,7 +564,7 @@ public class ReversedDepthFirstAdapter extends AnalysisAdapter
         {
             node.getNodeId().apply(this);
         }
-        outANodestmtNodeStmt(node);
+        outANodeStmt(node);
     }
 
     public void inANodeId(ANodeId node)
